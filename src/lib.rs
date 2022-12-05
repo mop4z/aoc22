@@ -49,9 +49,9 @@ mod tests {
             }
         }
         calories.sort();
+        println!("{:?}", &calories[calories.len() - 1],);
         println!(
-            "{:?} {:?}",
-            &calories[calories.len() - 1],
+            "{:?}",
             &calories[calories.len() - 3..].into_iter().sum::<i32>()
         )
     }
@@ -92,7 +92,7 @@ mod tests {
             score_1 += battle(&me_1, &opponent);
             score_2 += battle(&me_2, &opponent);
         }
-        println!("{score_1}, {score_2}")
+        println!("{score_1}\n{score_2}")
     }
 
     #[test]
@@ -119,8 +119,7 @@ mod tests {
         println!("{priorities_sum}");
 
         priorities_sum = 0;
-        let lines: Vec<&str> = data.lines().collect();
-        for items in lines.chunks(3) {
+        for items in data.lines().collect::<Vec<_>>().chunks(3) {
             let set_1: HashSet<char> = HashSet::from_iter(items[0].chars().into_iter());
             let set_2: HashSet<char> = HashSet::from_iter(items[1].chars().into_iter());
             let set_3: HashSet<char> = HashSet::from_iter(items[2].chars().into_iter());
@@ -130,5 +129,121 @@ mod tests {
             priorities_sum += priorities[duplicate_letter];
         }
         println!("{priorities_sum}");
+    }
+
+    #[test]
+    fn day_4() {
+        let data = std::fs::read_to_string("data/day4.txt").unwrap();
+        let cleaned_data = data.lines().map(|line| {
+            line.split(',')
+                .map(|assignments_str| {
+                    assignments_str
+                        .split('-')
+                        .map(|id| id.parse::<i32>().unwrap())
+                        .collect::<Vec<_>>()
+                })
+                .collect::<Vec<_>>()
+        });
+        let answer_1 = cleaned_data
+            .clone()
+            .map(|assignments| {
+                if (assignments[0][0] <= assignments[1][0])
+                    & (assignments[0][1] >= assignments[1][1])
+                {
+                    1
+                } else if (assignments[0][0] >= assignments[1][0])
+                    & (assignments[0][1] <= assignments[1][1])
+                {
+                    1
+                } else {
+                    0
+                }
+            })
+            .sum::<i32>();
+        println!("{answer_1}");
+        let answer_2 = cleaned_data
+            .clone()
+            .map(|assignments| {
+                if (assignments[0][0] <= assignments[1][0])
+                    & (assignments[0][1] >= assignments[1][0])
+                {
+                    1
+                } else if (assignments[0][0] <= assignments[1][1])
+                    & (assignments[0][1] >= assignments[1][1])
+                {
+                    1
+                } else if (assignments[1][0] <= assignments[0][0])
+                    & (assignments[1][1] >= assignments[0][0])
+                {
+                    1
+                } else if (assignments[1][0] <= assignments[0][1])
+                    & (assignments[1][1] >= assignments[0][1])
+                {
+                    1
+                } else {
+                    0
+                }
+            })
+            .sum::<i32>();
+        println!("{answer_2}")
+    }
+
+    #[test]
+    fn day_5() {
+        let data = std::fs::read_to_string("data/day5.txt").unwrap();
+        let data = data.split("\n").collect::<Vec<&str>>();
+        let data = data.split(|row| row.to_owned() == "").collect::<Vec<_>>();
+        let box_data = &mut data[0].iter().map(|row| row.as_bytes()).collect::<Vec<_>>();
+        box_data.reverse();
+        let mut columns: Vec<Vec<u8>> = vec![];
+        for (idx, byte) in box_data[0].iter().enumerate() {
+            if byte != &32u8 {
+                let mut column = vec![byte.to_owned()];
+                for row in &mut box_data[1..] {
+                    column.push(row[idx]);
+                }
+                columns.push(column);
+            }
+        }
+        let mut columns = columns
+            .iter()
+            .map(|column| {
+                std::str::from_utf8(column)
+                    .unwrap()
+                    .trim()
+                    .split("")
+                    .filter(|c| *c != "")
+                    .map(|c| c.to_owned())
+                    .collect::<Vec<_>>()
+            })
+            .collect::<Vec<_>>();
+
+        let instructions = &data[1]
+            .iter()
+            .map(|instruction| {
+                instruction
+                    .split(" ")
+                    .filter_map(|value| value.parse::<usize>().ok())
+                    .collect::<Vec<usize>>()
+            })
+            .collect::<Vec<_>>();
+
+        for instruction in instructions {
+            for _ in 0..instruction[0] {
+                let from_column = &mut columns[instruction[1] - 1];
+                let item = from_column.pop().unwrap();
+                let to_column = &mut columns[instruction[2] - 1];
+                to_column.push(item);
+            }
+        }
+        println!(
+            "{:?}",
+            columns
+                .iter()
+                .map(|column| column.last().unwrap().clone())
+                .collect::<Vec<_>>()
+                .into_iter()
+                .collect::<String>()
+        );
     }
 }
