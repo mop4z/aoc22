@@ -195,17 +195,17 @@ mod tests {
         let data = data.split(|row| row.to_owned() == "").collect::<Vec<_>>();
         let box_data = &mut data[0].iter().map(|row| row.as_bytes()).collect::<Vec<_>>();
         box_data.reverse();
-        let mut columns: Vec<Vec<u8>> = vec![];
+        let mut initial_columns: Vec<Vec<u8>> = vec![];
         for (idx, byte) in box_data[0].iter().enumerate() {
             if byte != &32u8 {
                 let mut column = vec![byte.to_owned()];
                 for row in &mut box_data[1..] {
                     column.push(row[idx]);
                 }
-                columns.push(column);
+                initial_columns.push(column);
             }
         }
-        let mut columns = columns
+        let initial_columns = initial_columns
             .iter()
             .map(|column| {
                 std::str::from_utf8(column)
@@ -217,7 +217,8 @@ mod tests {
                     .collect::<Vec<_>>()
             })
             .collect::<Vec<_>>();
-
+        let mut columns_1 = initial_columns.clone();
+        let mut columns_2 = initial_columns.clone();
         let instructions = &data[1]
             .iter()
             .map(|instruction| {
@@ -227,18 +228,23 @@ mod tests {
                     .collect::<Vec<usize>>()
             })
             .collect::<Vec<_>>();
-
         for instruction in instructions {
             for _ in 0..instruction[0] {
-                let from_column = &mut columns[instruction[1] - 1];
+                // Part 1
+                let from_column = &mut columns_1[instruction[1] - 1];
                 let item = from_column.pop().unwrap();
-                let to_column = &mut columns[instruction[2] - 1];
+                let to_column = &mut columns_1[instruction[2] - 1];
                 to_column.push(item);
             }
+            // // Part 2
+            // let from_column = &mut columns_2[instruction[1] - 1];
+            // println!("{from_column:?} {}");
+            // let items = &from_column[from_column.len() - instruction[0]..];
+            // println!("{from_column:?} => {items:?}");
         }
         println!(
             "{:?}",
-            columns
+            columns_1
                 .iter()
                 .map(|column| column.last().unwrap().clone())
                 .collect::<Vec<_>>()
