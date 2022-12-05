@@ -237,14 +237,24 @@ mod tests {
                 to_column.push(item);
             }
             // // Part 2
-            // let from_column = &mut columns_2[instruction[1] - 1];
-            // println!("{from_column:?} {}");
-            // let items = &from_column[from_column.len() - instruction[0]..];
-            // println!("{from_column:?} => {items:?}");
+            let from_column = columns_2[instruction[1] - 1].clone();
+            let items = (&from_column[from_column.len() - instruction[0]..]).to_vec();
+            columns_2[instruction[1] - 1] =
+                (&from_column[..from_column.len() - instruction[0]]).to_vec();
+            columns_2[instruction[2] - 1] = [columns_2[instruction[2] - 1].clone(), items].concat();
         }
         println!(
             "{:?}",
             columns_1
+                .iter()
+                .map(|column| column.last().unwrap().clone())
+                .collect::<Vec<_>>()
+                .into_iter()
+                .collect::<String>()
+        );
+        println!(
+            "{:?}",
+            columns_2
                 .iter()
                 .map(|column| column.last().unwrap().clone())
                 .collect::<Vec<_>>()
