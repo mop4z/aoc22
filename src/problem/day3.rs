@@ -28,8 +28,6 @@ impl Problem for Day {
                         .unwrap(),
                 )
             })
-            .collect::<Vec<_>>()
-            .iter()
             .sum::<i32>()
             .to_string()
     }
@@ -53,8 +51,6 @@ impl Problem for Day {
                         .unwrap(),
                 )
             })
-            .collect::<Vec<_>>()
-            .iter()
             .sum::<i32>()
             .to_string()
     }

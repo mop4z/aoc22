@@ -75,8 +75,6 @@ impl Problem for Day {
                 };
                 me.play(&opponent)
             })
-            .collect::<Vec<_>>()
-            .iter()
             .sum::<i32>()
             .to_string()
     }
@@ -107,8 +105,6 @@ impl Problem for Day {
                 };
                 me.play(&opponent)
             })
-            .collect::<Vec<_>>()
-            .iter()
             .sum::<i32>()
             .to_string()
     }
