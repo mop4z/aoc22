@@ -14,22 +14,47 @@ impl Problem for Day {
             .chars()
             .collect::<Vec<_>>()
             .windows(4)
-            .map(|input| {
-                input
-                    .iter()
-                    .map(|i| i.to_owned())
-                    .collect::<HashSet<char>>()
-                    .len()
-                    == 4
+            .enumerate()
+            .map(|(idx, input)| {
+                (
+                    idx,
+                    input
+                        .iter()
+                        .map(|i| i.to_owned())
+                        .collect::<HashSet<char>>()
+                        .len()
+                        == 4,
+                )
             })
-            .take_while(|x| x == &false)
-            .count()
+            .find(|(_, input)| input == &true)
+            .unwrap()
+            .0
             + 4)
         .to_string()
     }
     fn part_2(&self) -> String {
-        let data = self.read_data();
-        todo!()
+        (self
+            .read_data()
+            .chars()
+            .collect::<Vec<_>>()
+            .windows(14)
+            .enumerate()
+            .map(|(idx, input)| {
+                (
+                    idx,
+                    input
+                        .iter()
+                        .map(|i| i.to_owned())
+                        .collect::<HashSet<char>>()
+                        .len()
+                        == 14,
+                )
+            })
+            .find(|(_, input)| input == &true)
+            .unwrap()
+            .0
+            + 14)
+            .to_string()
     }
 }
 
@@ -44,7 +69,7 @@ mod tests {
                 .parse::<i32>()
                 .unwrap(),
         );
-        assert_eq!(problem.part_1(), "3");
+        assert_eq!(problem.part_1(), "1848");
     }
 
     #[test]
@@ -54,6 +79,6 @@ mod tests {
                 .parse::<i32>()
                 .unwrap(),
         );
-        assert_eq!(problem.part_2(), "");
+        assert_eq!(problem.part_2(), "2308");
     }
 }
