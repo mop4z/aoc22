@@ -52,13 +52,21 @@ mod tests {
 
     #[test]
     fn part_1() {
-        let problem = Day::new(1);
+        let problem = Day::new(
+            (std::module_path!().split("::").collect::<Vec<_>>()[2])[3..]
+                .parse::<i32>()
+                .unwrap(),
+        );
         assert_eq!(problem.part_1(), "66487");
     }
 
     #[test]
     fn part_2() {
-        let problem = Day::new(1);
+        let problem = Day::new(
+            (std::module_path!().split("::").collect::<Vec<_>>()[2])[3..]
+                .parse::<i32>()
+                .unwrap(),
+        );
         assert_eq!(problem.part_2(), "197301");
     }
 }
