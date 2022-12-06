@@ -7,8 +7,8 @@ trait Problem {
 
 impl Problem for Day {
     fn part_1(&self) -> String {
-        let data = self.read_data();
-        data.lines()
+        self.read_data()
+            .lines()
             .map(|line| {
                 line.split(',')
                     .map(|assignments_str| {
@@ -32,8 +32,8 @@ impl Problem for Day {
             .to_string()
     }
     fn part_2(&self) -> String {
-        let data = self.read_data();
-        data.lines()
+        self.read_data()
+            .lines()
             .map(|line| {
                 line.split(',')
                     .map(|assignments_str| {

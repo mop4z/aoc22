@@ -16,8 +16,8 @@ fn get_priority(&letter: &char) -> i32 {
 
 impl Problem for Day {
     fn part_1(&self) -> String {
-        let data = self.read_data();
-        data.lines()
+        self.read_data()
+            .lines()
             .map(|items| {
                 get_priority(
                     items[..items.len() / 2]
@@ -32,8 +32,8 @@ impl Problem for Day {
             .to_string()
     }
     fn part_2(&self) -> String {
-        let data = self.read_data();
-        data.lines()
+        self.read_data()
+            .lines()
             .map(|items| items.chars().collect::<HashSet<char>>())
             .collect::<Vec<_>>()
             .chunks(3)
