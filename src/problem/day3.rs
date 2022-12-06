@@ -41,7 +41,7 @@ impl Problem for Day {
             .chunks(3)
             .map(|sets| {
                 get_priority(
-                    sets.into_iter()
+                    sets.iter()
                         .fold(sets[0].clone(), |set_1, set_2| {
                             set_1
                                 .intersection(&set_2)

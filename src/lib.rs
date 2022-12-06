@@ -2,45 +2,6 @@ pub mod problem;
 
 #[cfg(test)]
 mod tests {
-    use std::collections::{HashMap, HashSet};
-
-    use super::*;
-
-    #[test]
-    fn day_3() {
-        let data = std::fs::read_to_string("data/day3.txt").unwrap();
-        let mut priorities: HashMap<char, usize> = HashMap::new();
-        for (c, i) in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            .chars()
-            .into_iter()
-            .enumerate()
-            .map(|(i, c)| (c, i + 1))
-        {
-            priorities.insert(c, i);
-        }
-        let mut priorities_sum = 0;
-        for items in data.lines() {
-            let set_1: HashSet<char> =
-                HashSet::from_iter(items[..items.len() / 2].chars().into_iter());
-            let set_2: HashSet<char> =
-                HashSet::from_iter(items[items.len() / 2..].chars().into_iter());
-            let duplicate_letter = set_1.intersection(&set_2).into_iter().next().unwrap();
-            priorities_sum += priorities[duplicate_letter];
-        }
-        println!("{priorities_sum}");
-
-        priorities_sum = 0;
-        for items in data.lines().collect::<Vec<_>>().chunks(3) {
-            let set_1: HashSet<char> = HashSet::from_iter(items[0].chars().into_iter());
-            let set_2: HashSet<char> = HashSet::from_iter(items[1].chars().into_iter());
-            let set_3: HashSet<char> = HashSet::from_iter(items[2].chars().into_iter());
-            let int_1: HashSet<&char> = HashSet::from_iter(set_1.intersection(&set_2));
-            let int_2: HashSet<&char> = HashSet::from_iter(set_2.intersection(&set_3));
-            let duplicate_letter = int_1.intersection(&int_2).into_iter().next().unwrap();
-            priorities_sum += priorities[duplicate_letter];
-        }
-        println!("{priorities_sum}");
-    }
 
     #[test]
     fn day_4() {
